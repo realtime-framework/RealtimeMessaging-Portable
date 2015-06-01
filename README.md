@@ -12,6 +12,9 @@ Realtime.Messaging.Portable is a PCL C# implementation of the Realtime Messaging
 - Microsoft.Bcl.Build (NuGet)
 - [Websockets.Portable](https://github.com/NVentimiglia/WebSocket.Portable) 
 
+### Setup
+
+Install the [RealtimeFramework.Messaging.Portable package](https://www.nuget.org/packages/RealtimeFramework.Messaging.Portable/) from NuGet
 
 ### Usage
 
@@ -52,5 +55,5 @@ Realtime.Messaging.Portable is a PCL C# implementation of the Realtime Messaging
 
 
 ### Author
-Realtime and [Nicholas Ventimiglia](https://github.com/NVentimiglia)
+[Realtime](http://realtime.co) and [Nicholas Ventimiglia](https://github.com/NVentimiglia)
 
