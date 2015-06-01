@@ -1,0 +1,13 @@
+﻿<Properties StartupItem="RealtimeFramework.Messaging.csproj">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="RealtimeFramework.Messaging.Droid\WebSocketWrapper.cs">
+    <Files>
+      <File FileName="Client.cs" Line="261" Column="55" />
+      <File FileName="RealtimeFramework.Messaging.Droid\WebSocketWrapper.cs" Line="10" Column="40" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>
