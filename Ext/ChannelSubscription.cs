@@ -1,11 +1,3 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using RealtimeFramework.Messaging;
-
 namespace RealtimeFramework.Messaging.Ext {
     internal class ChannelSubscription {
         private bool isSubscribing;

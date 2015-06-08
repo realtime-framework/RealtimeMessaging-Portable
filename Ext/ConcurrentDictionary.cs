@@ -1,7 +1,8 @@
-namespace System.Collections.Concurrent
-{
-    using Generic;
+using System;
+using System.Collections.Generic;
 
+namespace RealtimeFramework.Messaging.Ext
+{
     public sealed class ConcurrentDictionary<TKey, TValue> : Dictionary<TKey, TValue>
     {
         #region FIELDS
