@@ -8,8 +8,8 @@ namespace RealtimeFramework.Messaging.Tests
     public class UnitTestClient
     {
         public const string AuthToken = "12345";
-        public const string AppKey = "BsnG6J";
-        public const string PrivateKey = "eH4nshYKQMYh";
+        public const string AppKey = "";
+        public const string PrivateKey = "";
         public const string ClusterUrl = "http://ortc-developers.realtime.co/server/2.1/";
         public const string ClusterUrlSSL = "https://ortc-developers.realtime.co/server/2.1/";
 
