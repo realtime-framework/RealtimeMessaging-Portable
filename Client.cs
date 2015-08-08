@@ -127,6 +127,7 @@ namespace RealtimeFramework.Messaging
             {
                 if (message[0] != 'c')
                 {
+                    _reconnectTimer.Stop();
                     _connectionTimer.Start();
                 }
 
