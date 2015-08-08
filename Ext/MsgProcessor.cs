@@ -428,7 +428,7 @@ namespace RealtimeFramework.Messaging.Ext {
                     int messageCurrentPart = 1;
                     int messageTotalPart = 1;
                     bool lastPart = false;
-                    ConcurrentDictionary<int, BufferedMessage> messageParts = null;
+                    RealtimeDictionary<int, BufferedMessage> messageParts = null;
 
                     if (multiPartMatch.Success) {
                         if (multiPartMatch.Groups["messageId"].Length > 0) {
@@ -452,7 +452,7 @@ namespace RealtimeFramework.Messaging.Ext {
                         // Is a message part
                         if (!String.IsNullOrEmpty(messageId)) {
                             if (!client._multiPartMessagesBuffer.ContainsKey(messageId)) {
-                                client._multiPartMessagesBuffer.Add(messageId, new ConcurrentDictionary<int, BufferedMessage>());
+                                client._multiPartMessagesBuffer.Add(messageId, new RealtimeDictionary<int, BufferedMessage>());
                             }
 
 
@@ -506,7 +506,7 @@ namespace RealtimeFramework.Messaging.Ext {
                                             //}
 
                                             // Remove from messages buffer
-                                            ConcurrentDictionary<int, BufferedMessage> removeResult = null;
+                                            RealtimeDictionary<int, BufferedMessage> removeResult = null;
                                             client._multiPartMessagesBuffer.TryRemove(messageId, out removeResult);
                                         }
 

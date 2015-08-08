@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace RealtimeFramework.Messaging.Ext
 {
-    public sealed class ConcurrentDictionary<TKey, TValue> : Dictionary<TKey, TValue>
+    internal sealed class RealtimeDictionary<TKey, TValue> : Dictionary<TKey, TValue>
     {
         #region FIELDS
 

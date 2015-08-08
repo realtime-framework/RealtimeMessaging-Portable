@@ -51,7 +51,7 @@
     <Compile Include="Ext\Balancer.cs" />
     <Compile Include="Ext\BufferedMessage.cs" />
     <Compile Include="Ext\ChannelSubscription.cs" />
-    <Compile Include="Ext\ConcurrentDictionary.cs" />
+    <Compile Include="Ext\RealtimeDictionary.cs" />
     <Compile Include="Ext\Connection.cs" />
     <Compile Include="Ext\MsgProcessor.cs" />
     <Compile Include="Ext\Presence.cs" />
