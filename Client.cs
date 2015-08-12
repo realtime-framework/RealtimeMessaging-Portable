@@ -2,11 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading;
 using System.Text.RegularExpressions;
 using RealtimeFramework.Messaging.Ext;
 using RealtimeFramework.Messaging.Exceptions;
-using Timer = RealtimeFramework.Messaging.Ext.Timer;
 
 namespace RealtimeFramework.Messaging
 {
@@ -19,8 +17,8 @@ namespace RealtimeFramework.Messaging
         internal bool _callDisconnectedCallback;
         internal bool _waitingServerResponse;
         internal List<KeyValuePair<string, string>> _permissions;
-        internal ConcurrentDictionary<string, ChannelSubscription> _subscribedChannels;
-        internal ConcurrentDictionary<string, ConcurrentDictionary<int, BufferedMessage>> _multiPartMessagesBuffer;
+        internal RealtimeDictionary<string, ChannelSubscription> _subscribedChannels;
+        internal RealtimeDictionary<string, RealtimeDictionary<int, BufferedMessage>> _multiPartMessagesBuffer;
         internal Connection _webSocketConnection;
         internal DateTime? _lastKeepAlive; // Holds the time of the last keep alive received from the server
 
@@ -37,8 +35,8 @@ namespace RealtimeFramework.Messaging
             _gotOnOpenCount = 0;
 
             _permissions = new List<KeyValuePair<string, string>>();
-            _subscribedChannels = new ConcurrentDictionary<string, ChannelSubscription>();
-            _multiPartMessagesBuffer = new ConcurrentDictionary<string, ConcurrentDictionary<int, BufferedMessage>>();
+            _subscribedChannels = new RealtimeDictionary<string, ChannelSubscription>();
+            _multiPartMessagesBuffer = new RealtimeDictionary<string, RealtimeDictionary<int, BufferedMessage>>();
 
             _heartbeatTimer = new Timer(_heartbeatTimer_Elapsed, context.HeartbeatTime * 1000);
             _connectionTimer = new Timer(_connectionTimer_Elapsed, Constants.SERVER_HB_COUNT * 1000);
@@ -127,6 +125,7 @@ namespace RealtimeFramework.Messaging
             {
                 if (message[0] != 'c')
                 {
+                    _reconnectTimer.Stop();
                     _connectionTimer.Start();
                 }
 
@@ -191,8 +190,7 @@ namespace RealtimeFramework.Messaging
             }
 
         }
-
-
+        
         internal async void DoConnect()
         {
             _isConnecting = true;

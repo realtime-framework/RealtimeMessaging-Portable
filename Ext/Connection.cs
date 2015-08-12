@@ -25,26 +25,23 @@ namespace RealtimeFramework.Messaging.Ext
 
         #endregion
 
-        public Task NewConnection()
+        public void NewConnection()
         {
-            return Task.Factory.StartNew(() =>
-             {
-                 if (_websocket != null)
-                 {
-                     _websocket.Closed -= client_Closed;
-                     _websocket.Error -= client_Error;
-                     _websocket.MessageReceived -= client_MessageReceived;
-                     _websocket.Opened -= client_Opened;
-                     _websocket.Dispose();
-                     _websocket = null;
-                 }
+            if (_websocket != null)
+            {
+                _websocket.Closed -= client_Closed;
+                _websocket.Error -= client_Error;
+                _websocket.MessageReceived -= client_MessageReceived;
+                _websocket.Opened -= client_Opened;
+                _websocket.Dispose();
+                _websocket = null;
+            }
 
-                 _websocket = new WebSocketClient();
-                 _websocket.Closed += client_Closed;
-                 _websocket.Error += client_Error;
-                 _websocket.MessageReceived += client_MessageReceived;
-                 _websocket.Opened += client_Opened;
-             });
+            _websocket = new WebSocketClient();
+            _websocket.Closed += client_Closed;
+            _websocket.Error += client_Error;
+            _websocket.MessageReceived += client_MessageReceived;
+            _websocket.Opened += client_Opened;
         }
 
         void OnLog(LogLevel l, string m)
@@ -73,7 +70,7 @@ namespace RealtimeFramework.Messaging.Ext
 
             try
             {
-                await NewConnection();
+                NewConnection();
                 await _websocket.OpenAsync(connectionUrl);
             }
             catch (Exception ex)
@@ -90,7 +87,10 @@ namespace RealtimeFramework.Messaging.Ext
         {
             //System.Diagnostics.Debug.WriteLine("Connection.Close");
             if (_websocket != null)
+            {
                 await _websocket.CloseAsync();
+                _websocket = null;
+            }
         }
 
         public void Send(string message)

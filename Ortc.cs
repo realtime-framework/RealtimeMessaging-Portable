@@ -8,11 +8,11 @@ using RealtimeFramework.Messaging.Exceptions;
 
 namespace RealtimeFramework.Messaging {
     /// <summary>
-    /// Class with static methods for authentication and presence managment.
+    /// Class with static methods for authentication and presence management.
     /// </summary>
     public static class Ortc {
         /// <summary>
-        /// The channel permision.
+        /// The channel permission.
         /// </summary>
         public enum ChannelPermissions {
             /// <summary>
@@ -50,7 +50,7 @@ namespace RealtimeFramework.Messaging {
         /// <example>
         /// <code>
         ///    // Permissions
-        ///    Dictionary&lt;string, ChannelPermissions&gt; permissions = new Dictionary&lt;string, ChannelPermissions&gt;();
+        ///    Dictionary;string, ChannelPermissions; permissions = new Dictionary;string, ChannelPermissions;();
         /// 
         ///    permissions.Add("channel1", ChannelPermissions.Read);
         ///    permissions.Add("channel2", ChannelPermissions.Write);
@@ -104,10 +104,10 @@ namespace RealtimeFramework.Messaging {
         /// <example>
         /// <code>
         ///    // Permissions
-        ///    Dictionary&lt;string, ChannelPermissions&gt; permissions = new Dictionary&lt;string, List&lt;ChannelPermissions&gt;&gt;();
+        ///    Dictionary;string, ChannelPermissions; permissions = new Dictionary;string, List;ChannelPermissions;;();
         /// 
-        ///    Dictionary&lt;string, List&lt;ChannelPermissions&gt;&gt; channelPermissions = new Dictionary&lt;string, List&lt;ChannelPermissions&gt;&gt;();
-        ///    var permissionsList = new List&lt;ChannelPermissions&gt;();
+        ///    Dictionary;string, List;ChannelPermissions;; channelPermissions = new Dictionary;string, List;ChannelPermissions;;();
+        ///    var permissionsList = new List;ChannelPermissions;();
         /// 
         ///    permissionsList.Add(ChannelPermissions.Write);
         ///    permissionsList.Add(ChannelPermissions.Presence);
