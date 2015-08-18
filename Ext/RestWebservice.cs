@@ -1,5 +1,6 @@
 using System;
 using System.Net.Http;
+using ModernHttpClient;
 using RealtimeFramework.Messaging.Exceptions;
 
 namespace RealtimeFramework.Messaging.Ext
@@ -12,7 +13,7 @@ namespace RealtimeFramework.Messaging.Ext
         internal async static void DoRest(String url, String body, OnResponseDelegate callback) {
             try {
                 HttpContent content = new StringContent(body);
-                HttpClientHandler aHandler = new HttpClientHandler();
+                HttpClientHandler aHandler = new NativeMessageHandler();
                 aHandler.ClientCertificateOptions = ClientCertificateOption.Automatic;
                 HttpClient aClient = new HttpClient(aHandler);
                 Uri requestUri = new Uri(url);
@@ -36,7 +37,7 @@ namespace RealtimeFramework.Messaging.Ext
             OrtcPresenceException cbError = null;
             String cbSuccess = null;
             try {
-                HttpClientHandler aHandler = new HttpClientHandler();
+                HttpClientHandler aHandler = new NativeMessageHandler();
                 aHandler.ClientCertificateOptions = ClientCertificateOption.Automatic;
                 HttpClient aClient = new HttpClient(aHandler);
                 Uri requestUri = new Uri(url);

@@ -13,6 +13,7 @@ namespace RealtimeFramework.Messaging.Tests
         public const string ClusterUrl = "http://ortc-developers.realtime.co/server/2.1/";
         public const string ClusterUrlSSL = "https://ortc-developers.realtime.co/server/2.1/";
 
+
         public OrtcClient client;
         public Stopwatch Watch = new Stopwatch();
 
