@@ -1,10 +1,10 @@
 using System;
-using System.Net;
 using System.IO;
 using System.Text.RegularExpressions;
 
 using System.Net.Http;
 using System.Threading.Tasks;
+using ModernHttpClient;
 
 namespace RealtimeFramework.Messaging.Ext
 {
@@ -64,28 +64,17 @@ namespace RealtimeFramework.Messaging.Ext
         /// </code>
         /// </example>
         /// <remarks></remarks>
-        public static void GetServerFromBalancerAsync(String balancerUrl, String applicationKey, OnBalancerUrlResolvedDelegate onClusterUrlResolved)
+        public async static void GetServerFromBalancerAsync(String balancerUrl, String applicationKey, OnBalancerUrlResolvedDelegate onClusterUrlResolved)
         {
             var parsedUrl = String.IsNullOrEmpty(applicationKey) ? balancerUrl : balancerUrl + "?appkey=" + applicationKey;
+            var server = String.Empty;
 
-            var request = (HttpWebRequest)WebRequest.Create(new Uri(parsedUrl));
-
-            //ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3;
-            //request.Proxy = null;
-            //request.ProtocolVersion = HttpVersion.Version11;
-            request.Method = "GET";
-
-            request.BeginGetResponse((asynchronousResult) =>
+            try
             {
-                var server = String.Empty;
-
-                try
+                using (var client = new HttpClient(new NativeMessageHandler()))
                 {
-                    HttpWebRequest asyncRequest = (HttpWebRequest)asynchronousResult.AsyncState;
-
-                    HttpWebResponse response = (HttpWebResponse)asyncRequest.EndGetResponse(asynchronousResult);
-                    Stream streamResponse = response.GetResponseStream();
-                    StreamReader streamReader = new StreamReader(streamResponse);
+                    var response = await client.GetStreamAsync(new Uri(parsedUrl));
+                    StreamReader streamReader = new StreamReader(response);
 
                     server = ParseBalancerResponse(streamReader);
 
@@ -93,12 +82,13 @@ namespace RealtimeFramework.Messaging.Ext
                     {
                         onClusterUrlResolved(server, null);
                     }
+
                 }
-                catch (Exception ex)
-                {
-                    onClusterUrlResolved(server, ex);
-                }
-            }, request);
+            }
+            catch (Exception ex)
+            {
+                onClusterUrlResolved(server, ex);
+            }
         }
         // Private Methods (1) 
 
@@ -137,7 +127,7 @@ namespace RealtimeFramework.Messaging.Ext
         internal static String ResolveClusterUrl(String clusterUrl) {
             String server = "";
             try { 
-                using (var client = new HttpClient()) {
+                using (var client = new HttpClient(new NativeMessageHandler())) {
                     var response = client.GetAsync(clusterUrl).Result;
 
                     if (response.IsSuccessStatusCode) {
@@ -163,15 +153,11 @@ namespace RealtimeFramework.Messaging.Ext
         internal async static Task<String> ResolveClusterUrlAsync(String clusterUrl) {
             String server = "";
             try {
-                HttpClientHandler aHandler = new HttpClientHandler();
-                aHandler.ClientCertificateOptions = ClientCertificateOption.Automatic;
-                HttpClient aClient = new HttpClient(aHandler);
+                HttpClient aClient = new HttpClient(new NativeMessageHandler());
 				aClient.Timeout = new TimeSpan(0,0,Constants.HTTPCLIENT_TIMEOUT);
                 Uri requestUri = new Uri(clusterUrl);
-                HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, requestUri);
 
                 var result = await aClient.GetAsync(requestUri, HttpCompletionOption.ResponseContentRead);
-                var responseHeader = result.Headers;
                 var responseBody = await result.Content.ReadAsStringAsync();
 
                 if (result.IsSuccessStatusCode) {

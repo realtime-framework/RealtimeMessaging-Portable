@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using ModernHttpClient;
 using RealtimeFramework.Messaging.Ext;
 using RealtimeFramework.Messaging.Exceptions;
 
@@ -168,7 +169,7 @@ namespace RealtimeFramework.Messaging {
 
 
             HttpContent content = new StringContent(postParameters);
-            using (var client = new HttpClient()) {
+            using (var client = new HttpClient(new NativeMessageHandler())) {
                 var response = client.PostAsync(new Uri(connectionUrl), content).Result;
 
                 if (response.IsSuccessStatusCode) {
