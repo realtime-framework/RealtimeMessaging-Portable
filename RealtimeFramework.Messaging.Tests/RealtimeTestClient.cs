@@ -1,9 +1,12 @@
 using System;
 using System.Diagnostics;
+using System.Threading.Tasks;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using RealtimeFramework.Messaging;
 using RealtimeFramework.Messaging.Exceptions;
 using RealtimeFramework.Messaging.Ext;
 
-namespace RealtimeFramework.Messaging.Tests
+namespace RealtimeDotNetTests
 {
     public class RealtimeTestClient
     {
@@ -21,7 +24,7 @@ namespace RealtimeFramework.Messaging.Tests
         {
             client = new OrtcClient();
             client.ClusterUrl = ClusterUrlSSL;
-            client.ConnectionMetadata = "Xamarin-" + new Random().Next(1000);
+            client.ConnectionMetadata = "DotNet-" + new Random().Next(1000);
             client.HeartbeatTime = 2;
 
             client.OnConnected += client_OnConnected;
@@ -57,6 +60,7 @@ namespace RealtimeFramework.Messaging.Tests
         void client_OnException(object sender, Exception ex)
         {
             Error(ex.Message);
+            throw ex;
         }
 
         void client_OnDisconnected(object sender)
@@ -145,15 +149,70 @@ namespace RealtimeFramework.Messaging.Tests
 
         #endregion
 
-        public void Connect()
+        public async Task Connect()
         {
             Watch.Start();
             Write("Connecting ");
             client.Connect(AppKey, AuthToken);
+
+            var fault = DateTime.UtcNow.AddSeconds(5);
+            while (!client.IsConnected && DateTime.UtcNow < fault)
+            {
+                await Task.Delay(100);
+            }
+
+            Assert.IsTrue(client.IsConnected);
         }
-        public void Disconnect()
+
+
+        public void Send(string channel, string message)
         {
+            Write("Send " + channel);
+            client.Send(channel, message);
+        }
+
+        public async Task Subscribe(string channel, bool reconnect, OrtcClient.OnMessageDelegate action)
+        {
+            Write("Subscribe " + channel);
+            client.Subscribe(channel, reconnect, action);
+
+            var fault = DateTime.UtcNow.AddSeconds(5);
+            while (client.IsConnected && !client.IsSubscribed(channel) && DateTime.UtcNow < fault)
+            {
+                await Task.Delay(100);
+            }
+
+            Assert.IsTrue(client.IsSubscribed(channel));
+        }
+
+
+        public async Task UnSubscribe(string channel)
+        {
+            Write("UnSubscribe " + channel);
+            client.Unsubscribe(channel);
+
+            var fault = DateTime.UtcNow.AddSeconds(5);
+            while (client.IsConnected && client.IsSubscribed(channel) && DateTime.UtcNow < fault)
+            {
+                await Task.Delay(100);
+            }
+
+            Assert.IsTrue(!client.IsSubscribed(channel));
+        }
+
+
+        public async Task Disconnect()
+        {
+            Write("Disconnect ");
             client.Disconnect();
+
+            var fault = DateTime.UtcNow.AddSeconds(5);
+            while (client.IsConnected && DateTime.UtcNow < fault)
+            {
+                await Task.Delay(100);
+            }
+
+            Assert.IsTrue(!client.IsConnected);
         }
     }
 }
