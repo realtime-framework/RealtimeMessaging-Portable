@@ -48,6 +48,7 @@
     <Compile Include="Exceptions\OrtcNotSubscribedException.cs" />
     <Compile Include="Exceptions\OrtcPresenceException.cs" />
     <Compile Include="Exceptions\OrtcSubscribedException.cs" />
+    <Compile Include="Ext\AsyncSemaphore.cs" />
     <Compile Include="Ext\Balancer.cs" />
     <Compile Include="Ext\BufferedMessage.cs" />
     <Compile Include="Ext\ChannelSubscription.cs" />

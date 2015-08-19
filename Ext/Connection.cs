@@ -22,6 +22,7 @@ namespace RealtimeFramework.Messaging.Ext
         #region Attributes
 
         private WebSocketClient _websocket = null;
+        private AsyncLock _lock = new AsyncLock();
 
         #endregion
 
@@ -93,7 +94,7 @@ namespace RealtimeFramework.Messaging.Ext
             }
         }
 
-        public void Send(string message)
+        public async void Send(string message)
         {
             if (_websocket == null)
                 return;
@@ -101,7 +102,8 @@ namespace RealtimeFramework.Messaging.Ext
             try
             {
                 message = "\"" + message + "\"";
-                _websocket.SendAsync(message);
+                using (await _lock.LockAsync())
+                    await _websocket.SendAsync(message);
             }
             catch
             {
