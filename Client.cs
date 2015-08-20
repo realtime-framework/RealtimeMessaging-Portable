@@ -59,6 +59,7 @@ namespace RealtimeFramework.Messaging
         private void _webSocketConnection_OnClosed()
         {
             // Clear user permissions
+            var wasdisconnected = _isConnecting || context.IsConnected;
             _permissions.Clear();
             _isConnecting = false;
             context.IsConnected = false;
@@ -69,7 +70,7 @@ namespace RealtimeFramework.Messaging
             {
                 DoReconnect();
             }
-            else
+            else if (wasdisconnected)
             {
                 context.DelegateDisconnectedCallback();
             }
@@ -210,6 +211,8 @@ namespace RealtimeFramework.Messaging
                     {
                         context.DelegateExceptionCallback(new OrtcEmptyFieldException("Unable to get URL from cluster"));
 
+                        if (!_isConnecting)
+                            return;
                         DoReconnect();
                     }
                 }
@@ -217,10 +220,14 @@ namespace RealtimeFramework.Messaging
                 {
                     context.DelegateExceptionCallback(new OrtcNotConnectedException(ex.Message));
 
+                    if (!_isConnecting)
+                        return;
                     DoReconnect();
                 }
             }
 
+            if (!_isConnecting)
+                return;
             if (!String.IsNullOrEmpty(context.Url))
             {
                 try
@@ -231,7 +238,7 @@ namespace RealtimeFramework.Messaging
                     //
                     _waitingServerResponse = true;
 
-                    //StartReconnectTimer();
+                    StartReconnectTimer();
                     //
                 }
                 catch (OrtcEmptyFieldException ex)
@@ -258,7 +265,6 @@ namespace RealtimeFramework.Messaging
                 {
                     StartReconnectTimer();
 
-                    DoConnect();
                 }
             }
         }
